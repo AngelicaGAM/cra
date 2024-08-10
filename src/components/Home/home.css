@@ -1,0 +1,11 @@
+/* src/Home.css */
+.home {
+    width: 100%;
+    background: blue;
+  }
+  
+  section {
+    padding: 20px;
+    text-align: center;
+  }
+  
