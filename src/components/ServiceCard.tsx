@@ -56,7 +56,7 @@ const TextOverlay = styled.div`
   padding: 20px;
   opacity: 0;
   transition: opacity 0.4s ease-in-out;
-  border-radius: 10px; /* Mantiene el border-radius */
+  border-radius: 10px !important; /* Mantiene el border-radius */
   
   font-size: 24px; /* Texto más grande */
   font-weight: bold; /* Texto en negrita */

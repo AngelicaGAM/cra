@@ -1,4 +1,17 @@
-.slick-slide{
-    display: flex !important;
-    justify-content: center !important;
+.corpSolutions {
+  display: flex;
+  overflow: hidden;
+
+  .text-corp {
+    font-size: 1.2rem;
+        background: blue;
+        text-align: justify;
+        padding: 1rem;
+        align-content: center;
   }
+
+  .image {
+    max-width: 50%;
+    max-height: 40%;
+  }
+}

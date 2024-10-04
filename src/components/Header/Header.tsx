@@ -17,7 +17,7 @@ const Header: React.FC = () => {
     display: 'flex',
     justifyContent: isMobile ? 'space-between': 'space-around'  ,
     alignItems: 'center',
-    padding: '10px 20px',
+    padding: '20px 20px',
     backgroundColor: '#fff',
     boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)'
   };
@@ -51,7 +51,7 @@ const Header: React.FC = () => {
             animate="visible"
             variants={menuVariants}
           >
-            Sección 1
+            Servicios
           </motion.a>
           <motion.a
             href="#section2"
@@ -62,7 +62,7 @@ const Header: React.FC = () => {
             animate="visible"
             variants={menuVariants}
           >
-            Sección 2
+           Clientes
           </motion.a>
           <motion.a
             href="#section3"
@@ -73,7 +73,8 @@ const Header: React.FC = () => {
             animate="visible"
             variants={menuVariants}
           >
-            Sección 3
+            Contacto
+
           </motion.a>
         </nav>
       )}
@@ -166,7 +167,7 @@ const mobileMenuContainerStyles: React.CSSProperties = {
   top: 0,
   left: 0,
   width: '100%',
-  height: '100vh',
+  height: '50vh',
   backgroundColor: '#fff',
   zIndex: 1000,
   display: 'flex',
@@ -187,7 +188,7 @@ const mobileMenuStyles: React.CSSProperties = {
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
-  gap: '20px',
+  gap: '3rem',
   marginTop: '20px',
 };
 

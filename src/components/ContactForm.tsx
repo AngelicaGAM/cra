@@ -1,249 +1,151 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { motion } from 'framer-motion';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { joiResolver } from '@hookform/resolvers/joi';
+import * as Joi from 'joi';
 import emailjs from 'emailjs-com';
+import './ContactForm.css'; // Estilos mejorados
+import banner1 from '../assets/images/banner1.jpg';
+import { useMediaQuery } from 'react-responsive';
+import Swal from 'sweetalert2'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  min-height: 100vh;
-  background-color: #f0f0f0;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-  }
-`;
-
-const ImageSection = styled.div`
-  flex: 1;
-  background-image: url('https://your-image-url.com');
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-`;
-
-const OverlayText = styled.div`
-  color: white;
-  text-align: center;
-  font-size: 2rem;
-  font-weight: bold;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 1rem;
-  border-radius: 10px;
-`;
-
-const FormSection = styled.div`
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  background-color: white;
-`;
-
-const FormContainer = styled(motion.div)`
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
-  width: 100%;
-  max-width: 500px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const Title = styled.h2`
-  margin-bottom: 1rem;
-  color: #333;
-`;
-
-const Form = styled.form`
-  width: 100%;
-`;
-
-const Input = styled.input<{ error?: boolean }>`
-  width: 100%;
-  padding: 0.8rem;
-  margin-bottom: 1rem;
-  border-radius: 5px;
-  border: 1px solid ${({ error }) => (error ? 'red' : '#ccc')};
-  font-size: 1rem;
-`;
-
-const Select = styled.select<{ error?: boolean }>`
-  width: 100%;
-  padding: 0.8rem;
-  margin-bottom: 1rem;
-  border-radius: 5px;
-  border: 1px solid ${({ error }) => (error ? 'red' : '#ccc')};
-  font-size: 1rem;
-`;
-
-const TextArea = styled.textarea<{ error?: boolean }>`
-  width: 100%;
-  padding: 0.8rem;
-  margin-bottom: 1rem;
-  border-radius: 5px;
-  border: 1px solid ${({ error }) => (error ? 'red' : '#ccc')};
-  font-size: 1rem;
-  resize: none;
-`;
-
-const Button = styled(motion.button)`
-  padding: 0.8rem 2rem;
-  background-color: #007BFF;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
-  margin-top: 1rem;
-
-  &:hover {
-    background-color: #0056b3;
-  }
-`;
-
-const ErrorMessage = styled.span`
-  color: red;
-  font-size: 0.875rem;
-  margin-bottom: 1rem;
-`;
+const schema = Joi.object({
+  name: Joi.string().min(3).max(30).required().messages({
+    'string.empty': 'El nombre es requerido',
+    'string.min': 'El nombre debe tener al menos 3 caracteres',
+    'string.max': 'El nombre no puede tener más de 30 caracteres',
+  }),
+  email: Joi.string().email({ tlds: { allow: false } }).required().messages({
+    'string.empty': 'El email es requerido',
+    'string.email': 'Formato de email inválido',
+  }),
+  phone: Joi.string().pattern(/^[0-9]+$/).min(10).max(15).required().messages({
+    'string.empty': 'El teléfono es requerido',
+    'string.pattern.base': 'Formato de teléfono inválido',
+    'string.min': 'El teléfono debe tener al menos 10 caracteres',
+    'string.max': 'El teléfono no puede tener más de 15 caracteres',
+  }),
+  message: Joi.string().min(10).required().messages({
+    'string.empty': 'El mensaje es requerido',
+    'string.min': 'El mensaje debe tener al menos 10 caracteres',
+  }),
+});
 
 const ContactForm: React.FC = () => {
-  const [formValues, setFormValues] = useState({
-    name: '',
-    email: '',
-    service: '',
-    message: '',
+  const isMobile = useMediaQuery({ maxWidth: 768 });
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: joiResolver(schema),
   });
 
-  const [errors, setErrors] = useState({
-    name: false,
-    email: false,
-    service: false,
-    message: false,
-  });
+  const onSubmit = (data: any) => {
+    emailjs.send(
+      'service_rfzvygg', //  SERVICE_ID
+      'template_zphh3rv', // TEMPLATE_ID
+      {
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        message: data.message,
+      },
+      '4Ip8_xEQ11eTtJ6oO' // USER_ID
+    ).then(() => {
+     
+ 
 
-  const validateEmail = (email: string) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const { name, email, service, message } = formValues;
-    const newErrors = {
-      name: name === '',
-      email: !validateEmail(email),
-      service: service === '',
-      message: message === '',
-    };
-
-    setErrors(newErrors);
-
-    if (Object.values(newErrors).every((error) => !error)) {
-      // Enviar el correo usando EmailJS
-      emailjs.send(
-        'your_service_id',
-        'your_template_id',
-        formValues,
-        'your_user_id'
-      ).then(() => {
-        alert('Message sent successfully!');
-        setFormValues({
-          name: '',
-          email: '',
-          service: '',
-          message: '',
-        });
-      }).catch((error) => {
-        console.error('Failed to send message:', error);
-        alert('Failed to send message.');
+      Swal.fire({
+        title: " ¡Oh no!  ",
+        html: "¡Mensaje enviado correctamente!  Nuestro equipo se pondra en contacto contigo pronto.",
+        showConfirmButton: false,
+        icon: "success",
+        showClass: {
+          popup: 'swal2-show',
+          backdrop: 'swal2-backdrop-show',
+          icon: 'swal2-icon-show'
+        },
+        hideClass:{
+          popup: 'swal2-hide',
+          backdrop: 'swal2-backdrop-hide',
+          icon: 'swal2-icon-hide'
+        }
       });
-    }
-  };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    setFormValues({
-      ...formValues,
-      [e.target.name]: e.target.value,
+    }).catch(() => {
+
+      Swal.fire({
+        title: " ¡Oh no!  ",
+        html: "Lo sentimos, hubo un error al enviar tu correo. <br/> Intenta más tarde.",
+        showConfirmButton: false,
+        icon: "error",
+        showClass: {
+          popup: 'swal2-show',
+          backdrop: 'swal2-backdrop-show',
+          icon: 'swal2-icon-show'
+        },
+        hideClass:{
+          popup: 'swal2-hide',
+          backdrop: 'swal2-backdrop-hide',
+          icon: 'swal2-icon-hide'
+        }
+      });
+      
     });
   };
 
   return (
-    <Container>
-      <ImageSection>
-        <OverlayText>
-          Your Text Here
-        </OverlayText>
-      </ImageSection>
-      <FormSection>
-        <FormContainer
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <Title>Contact Us</Title>
-          <Form onSubmit={handleSubmit}>
-            <Input
-              type="text"
-              name="name"
-              placeholder="Your Name"
-              value={formValues.name}
-              onChange={handleChange}
-              error={errors.name}
-              required
-            />
-            {errors.name && <ErrorMessage>Name is required.</ErrorMessage>}
-            
-            <Input
-              type="email"
-              name="email"
-              placeholder="Your Email"
-              value={formValues.email}
-              onChange={handleChange}
-              error={errors.email}
-              required
-            />
-            {errors.email && <ErrorMessage>Invalid email address.</ErrorMessage>}
-            
-            <Select
-              name="service"
-              value={formValues.service}
-              onChange={handleChange}
-              error={errors.service}
-              required
-            >
-              <option value="">Select a Service</option>
-              <option value="Service 1">Service 1</option>
-              <option value="Service 2">Service 2</option>
-              <option value="Service 3">Service 3</option>
-            </Select>
-            {errors.service && <ErrorMessage>Service is required.</ErrorMessage>}
-            
-            <TextArea
-              name="message"
-              placeholder="Your Message"
-              rows={4}
-              value={formValues.message}
-              onChange={handleChange}
-              error={errors.message}
-              required
-            />
-            {errors.message && <ErrorMessage>Message is required.</ErrorMessage>}
-            
-            <Button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} type="submit">
-              Send Message
-            </Button>
-          </Form>
-        </FormContainer>
-      </FormSection>
-    </Container>
+    <div className="contact-container">
+     
+   
+      <form onSubmit={handleSubmit(onSubmit)} className="contact-form">
+        <h2>Contáctanos</h2>
+        <div className='container-div'>
+          <div className="form-group">
+            <label htmlFor="name">Nombre</label>
+            <input id="name" {...register('name')} />
+          </div>
+          <div className='div-error'>
+            {errors.name && <p className="error-message">{errors.name.message}</p>}
+          </div>       
+        </div>
+
+        <div className='container-div'>
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input id="email" {...register('email')} />
+          </div>
+          <div className='div-error'>
+            {errors.email && <p className="error-message">{errors.email.message}</p>}
+          </div>  
+        </div>
+
+        <div className='container-div'>
+          <div className="form-group">
+            <label htmlFor="phone">Teléfono</label>
+            <input id="phone" {...register('phone')} />
+          </div>
+          <div className='div-error'>
+            {errors.phone && <p className="error-message">{errors.phone.message}</p>}
+          </div>
+        </div>
+
+        <div className='container-div'>
+          <div className="form-group">
+            <label htmlFor="message">Mensaje</label>
+            <textarea id="message" {...register('message')} />
+          </div>
+          <div className='div-error'>
+          {errors.message && <p className="error-message">{errors.message.message}</p>}
+          </div>
+        </div>
+
+
+        <button type="submit">Enviar Mensaje</button>
+      </form>
+
+      { !isMobile &&  
+      <div className="contact-banner">
+        <img src={banner1} alt="Banner" /> {/* Reemplaza con la URL de tu imagen */}
+      </div>}
+     
+    </div>
   );
 };
 

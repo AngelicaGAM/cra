@@ -2,16 +2,21 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import './MarketClients.css';
 
+import aviacion from '../assets/images/clientes/aviacion.jpg'
+import bienes from '../assets/images/clientes/bienesRaices.jpg'
+import hotels from '../assets/images/clientes/hotels.jpg'
+import concierge from '../assets/images/clientes/concierge.jpg'
+import finanzas from '../assets/images/clientes/finanzas.jpg'
+// import finanzas from '../assets/images/clientes/concierge.jpg'
+
 const MarketClients: React.FC = () => {
   const services = [
     { name: 'Atención médica', image: 'https://3.bp.blogspot.com/-BQEEvw68Y_8/Ut6BeruTbxI/AAAAAAAACho/NnlM-PkQ1hs/s1600/avionA320.jpg', link: '#atencion-medica' },
-    { name: 'Aviación privada', image: '/images/aviacion-privada.jpg', link: '#aviacion-privada' },
-    { name: 'Bienes raíces', image: '/images/bienes-raices.jpg', link: '#bienes-raices' },
-    { name: 'Hoteles', image: '/images/hoteles.jpg', link: '#hoteles' },
-    { name: 'Turismo', image: '/images/turismo.jpg', link: '#turismo' },
-    { name: 'Conserjería', image: '/images/conserjeria.jpg', link: '#conserjeria' },
-    { name: 'Lujo', image: '/images/lujo.jpg', link: '#lujo' },
-    { name: 'Finanzas', image: '/images/finanzas.jpg', link: '#finanzas' },
+    { name: 'Aviación privada', image: aviacion , link: '#aviacion-privada' },
+    { name: 'Bienes raíces', image: bienes, link: '#bienes-raices' },
+    { name: 'Hoteles', image: hotels, link: '#hoteles' },
+    { name: 'Conserjería', image: concierge, link: '#conserjeria' },  
+    { name: 'Finanzas', image: finanzas, link: '#finanzas' },
   ];
 
   return (

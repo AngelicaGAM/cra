@@ -1,6 +1,7 @@
 import React from 'react';
 import { useMediaQuery } from 'react-responsive';
 import image from '../../assets/images/home-mobile.jpg'
+import video from '../../assets/images/video/videoBanner.mp4'
 
 const Home: React.FC = () => {
   const isMobile = useMediaQuery({ maxWidth: 768 });
@@ -15,7 +16,7 @@ const Home: React.FC = () => {
         />
       ) : (
         <video
-          src="/path/to/your/video.mp4"
+          src={video}
           style={mediaStyles}
           autoPlay
           loop
@@ -23,7 +24,11 @@ const Home: React.FC = () => {
         />
       )}
       <div style={overlayStyles}>
+        <div style={textstylesDiv}>
         <h1 style={textStyles}>CRA Consulting</h1>
+        <p> Innovamos, optimizamos y crecemos contigo: tu éxito es nuestra misión. </p>
+        </div>
+    
       </div>
     </div>
   );
@@ -33,7 +38,7 @@ const Home: React.FC = () => {
 const containerStyles: React.CSSProperties = {
   position: 'relative',
   width: '100%',
-  height: '100vh',
+  height: '60vh',
   overflow: 'hidden',
 };
 
@@ -55,11 +60,16 @@ const overlayStyles: React.CSSProperties = {
   background: 'rgba(0, 0, 0, 0.5)', // Capa de difuminado oscuro
 };
 
+const textstylesDiv: React.CSSProperties = {
+    color: 'white', 
+    fontWeight: 'bold'
+}
 const textStyles: React.CSSProperties = {
   color: 'white',
   fontSize: '3rem',
   textAlign: 'center',
-  textShadow: '0px 4px 8px rgba(0, 0, 0, 0.7)', // Efecto difuminado en el texto
+  textShadow: '0px 4px 8px #152347', // Efecto difuminado en el texto
 };
+
 
 export default Home;

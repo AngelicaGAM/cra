@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
+import { IoLocationOutline } from "react-icons/io5";
 import { motion } from 'framer-motion';
 import logoFooter from '../../assets/images/footer.png'
 
@@ -23,7 +24,7 @@ const Footer: React.FC = () => {
           whileTap={{ scale: 0.95 }}
         >
           <FaPhone style={iconStyles} />
-          <span style={textStyles}>+1 (123) 456-7890</span>
+          <span style={textStyles}> 561 478 7336</span>
         </motion.div>
         <motion.div
           style={contactItemStyles}
@@ -31,7 +32,7 @@ const Footer: React.FC = () => {
           whileTap={{ scale: 0.95 }}
         >
           <FaPhone style={iconStyles} />
-          <span style={textStyles}>+1 (098) 765-4321</span>
+          <span style={textStyles}>998 191 8853</span>
         </motion.div>
         <motion.div
           style={contactItemStyles}
@@ -39,7 +40,7 @@ const Footer: React.FC = () => {
           whileTap={{ scale: 0.95 }}
         >
           <FaPhone style={iconStyles} />
-          <span style={textStyles}>+1 (555) 123-4567</span>
+          <span style={textStyles}>998 122 9370</span>
         </motion.div>
       </div>
       <div style={columnStyles}>
@@ -49,7 +50,8 @@ const Footer: React.FC = () => {
           whileTap={{ scale: 0.95 }}
         >
           <FaEnvelope style={iconStyles} />
-          <span style={textStyles}>contact@company.com</span>
+          <span style={textStyles}>hello@CRAS.com
+          </span>
         </motion.div>
         <motion.div
           style={contactItemStyles}
@@ -57,7 +59,7 @@ const Footer: React.FC = () => {
           whileTap={{ scale: 0.95 }}
         >
           <FaMapMarkerAlt style={iconStyles} />
-          <span style={textStyles}>1234 Company St, City, Country</span>
+          <span style={textStyles}>Av. Acanceh, Manzana 2, Literal 3, Piso 3 <br/>Contraesquina, De Las Americas, 77504 Cancún, Q.R.</span>
         </motion.div>
       </div>
     </footer>
@@ -70,8 +72,7 @@ const footerStyles: React.CSSProperties = {
   justifyContent: 'space-around',
   alignItems: 'flex-start',
   padding: '20px',
-  backgroundColor: '#f0f0f0',
-  borderTop: '1px solid #ccc',
+  backgroundColor: '#152347',
   flexWrap: 'wrap',
 };
 
@@ -95,13 +96,16 @@ const contactItemStyles: React.CSSProperties = {
 };
 
 const iconStyles: React.CSSProperties = {
-  color: '#007bff', // Azul
+  color: 'white', // Azul
   fontSize: '1.5rem',
 };
 
 const textStyles: React.CSSProperties = {
   fontSize: '1rem',
-  color: '#333',
+  color: 'white',
+  fontWeight: '100',
+  alignSelf: 'center',
+  textAlign: 'justify'
 };
 
 export default Footer;
